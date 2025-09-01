@@ -34,12 +34,11 @@ io.on("connection", (socket) => {
 
   // add user
   socket.on("addUser", (data) => {
-    console.log("data", data);
     if (!users.some((u) => u.id.toString() === data.id.toString())) {
       users.push({ ...data, socketId: socket.id });
     }
     io.emit("getUsers", users);
-    console.log("users", users);
+    // console.log("users", users);
   });
 
   // socket.on("addUser", (userId) => {
@@ -72,7 +71,7 @@ io.on("connection", (socket) => {
     const newMsg = await newMessage.save();
     // console.log(newMsg);
     // find receiver from active users (not DB)
-    console.log("receiver id", receiverId);
+    // console.log("receiver id", receiverId);
     const receiver = users.find((u) => u.id.toString() === receiverId);
     if (receiver) {
       // io.to(receiver.socketId).emit("getMessage", newMsg);
