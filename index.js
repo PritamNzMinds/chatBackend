@@ -41,40 +41,14 @@ io.on("connection", (socket) => {
     // console.log("users", users);
   });
 
-  // socket.on("addUser", (userId) => {
-  //   socket.join(userId);
-  //   console.log(`User ${userId} joined their room`);
-  // });
-
-  // send message to specific user
-  // socket.on("sendMessage", async (data) => {
-
-  //   const {senderId,message,receiverId}=data;
-  //   // save data in db
-  //   const newMessage=new Message({senderId,message,receiverId});
-  //   const newMsg=await newMessage.save();
-
-  //   const users=await User.find({});
-  //   const receiver = users.find((u) => u._id.toString() === receiverId);
-  //   console.log(newMsg);
-  //   if (receiver) {
-  //     console.log(receiver);
-  //     console.log("receiver",receiver);
-  //     io.to(receiver._id.toString()).emit("getMessage",newMsg);
-  //   }
-  // });
   socket.on("sendMessage", async (data) => {
     const { senderId, message, receiverId } = data;
-
     // save message to DB
     const newMessage = new Message({ senderId, message, receiverId });
     const newMsg = await newMessage.save();
-    // console.log(newMsg);
     // find receiver from active users (not DB)
-    // console.log("receiver id", receiverId);
     const receiver = users.find((u) => u.id.toString() === receiverId);
     if (receiver) {
-      // io.to(receiver.socketId).emit("getMessage", newMsg);
       io.to(receiver.socketId).emit("getMessage", newMsg);
     } else {
       console.log("Receiver not found in  users list");
